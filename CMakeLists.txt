@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(doctext-project)
+project(owl-project)
 
 # flags
 set(CMAKE_C_FLAGS "-std=gnu99 -Wall -g3")

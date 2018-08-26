@@ -1,20 +1,20 @@
 #ifndef TEXTDOC_LEXER_H
 #define TEXTDOC_LEXER_H
 
-#include <textdoc/bytestream.h>
+#include <owl/bytestream.h>
 
 enum td_token_type {
-        td_token_keyword,
-        td_token_string
+    td_token_keyword,
+    td_token_string
 };
 
 typedef struct {
-        td_bytestream_t *s;
+    td_bytestream_t *s;
 } td_lexer_t;
 
 struct td_token {
-        enum td_token_type type;
-        const char *value;
+    enum td_token_type type;
+    const char *value;
 };
 
 void td_lexer_init(td_lexer_t *l, td_bytestream_t *s);

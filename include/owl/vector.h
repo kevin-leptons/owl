@@ -8,10 +8,10 @@
 #include <stdlib.h>
 
 typedef struct {
-	size_t cap;
-	size_t size;
-	size_t slot_size;
-	void *slots;
+    size_t cap;
+    size_t size;
+    size_t slot_size;
+    void *slots;
 } td_vector_t;
 
 void td_vector_init(td_vector_t *v, size_t cap, size_t slot_size);

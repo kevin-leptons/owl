@@ -6,15 +6,15 @@
 typedef struct td_list_slot td_list_slot_t;
 
 struct td_list_slot {
-        td_list_slot_t *prev;
-        td_list_slot_t *next;
-        void *item;
+    td_list_slot_t *prev;
+    td_list_slot_t *next;
+    void *item;
 };
 
 typedef struct {
-        size_t size;
-        struct td_list_slot *front;
-        struct td_list_slot *back;
+    size_t size;
+    struct td_list_slot *front;
+    struct td_list_slot *back;
 } td_list_t;
 
 void td_list_init(td_list_t *l);

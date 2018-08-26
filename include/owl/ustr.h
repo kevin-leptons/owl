@@ -6,9 +6,9 @@
 #include <stdbool.h>
 
 typedef struct {
-        size_t cap;             // read-only
-        size_t size;            // read-only
-        uint32_t *slots;        // read-only
+    size_t cap;             // read-only
+    size_t size;            // read-only
+    uint32_t *slots;        // read-only
 } td_ustr_t;
 
 void td_ustr_init(td_ustr_t *dst, size_t cap);
@@ -28,22 +28,22 @@ void td_ustr_copy_seqwc(td_ustr_t *dst, const wchar_t *src, size_t size);
 
 void td_ustr_ins(td_ustr_t *dst, const td_ustr_t *src, size_t index);
 void td_ustr_ins_seq(
-        td_ustr_t *dst,
-        const uint32_t *src,
-        size_t index,
-        size_t size
+    td_ustr_t *dst,
+    const uint32_t *src,
+    size_t index,
+    size_t size
 );
 void td_ustr_ins_seqc(
-        td_ustr_t *dst,
-        const char *src,
-        size_t index,
-        size_t size
+    td_ustr_t *dst,
+    const char *src,
+    size_t index,
+    size_t size
 );
 void td_ustr_ins_seqwc(
-        td_ustr_t *dst,
-        const wchar_t *src,
-        size_t index,
-        size_t size
+    td_ustr_t *dst,
+    const wchar_t *src,
+    size_t index,
+    size_t size
 );
 
 void td_ustr_pub(td_ustr_t *dst, uint32_t code);
@@ -56,10 +56,10 @@ void td_ustr_cat_seqc(td_ustr_t *dst, const char *src, size_t size);
 void td_ustr_cat_seqwc(td_ustr_t *dst, const wchar_t *src, size_t size);
 
 void td_ustr_sub(
-        td_ustr_t *dst,
-        const td_ustr_t *src,
-        size_t begin,
-        size_t size
+    td_ustr_t *dst,
+    const td_ustr_t *src,
+    size_t begin,
+    size_t size
 );
 void td_ustr_erase(td_ustr_t *dst, size_t begin, size_t size);
 void td_ustr_clean(td_ustr_t *dst);

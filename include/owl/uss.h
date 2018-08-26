@@ -1,7 +1,7 @@
 /*
 NAME
 
-        uss - unicode symbol stream for file.
+    uss - unicode symbol stream for file.
 */
 
 #include <stdio.h>
@@ -11,7 +11,7 @@ NAME
 #define TD_USS_H
 
 typedef struct {
-        FILE *fs;
+    FILE *fs;
 } td_uss_t;
 
 void td_uss_init(td_uss_t *s, const char *file);

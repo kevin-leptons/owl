@@ -10,16 +10,16 @@ ERRORS
 #define TD_BYTESTREAM_H
 
 #include <stdlib.h>
-#include <textdoc/error.h>
+#include <owl/error.h>
 
 typedef struct {
-        int fd;
-        char *buff;
-        size_t buff_cap;
-        size_t buff_size;
-        size_t buff_offset;
-        size_t line_num;
-        size_t col_num;
+    int fd;
+    char *buff;
+    size_t buff_cap;
+    size_t buff_size;
+    size_t buff_offset;
+    size_t line_num;
+    size_t col_num;
 } td_bytestream_t;
 
 void td_bytestream_init(td_bytestream_t *s, const char *file,
