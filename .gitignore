@@ -1,0 +1,6 @@
+tmp/
+dest/
+dist/
+build/
+*.swp
+*.swo

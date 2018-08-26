@@ -1,0 +1,51 @@
+// context-free grammar
+
+sp = \x20;
+cr = \x0d;
+hyphen = \x2d;
+dot = '.';
+slash = '/'
+back-slash = '\;'
+indent = sp{4};
+str-char = \x20-7a; 
+str = str-char{1,};
+lower = \x61-7a;
+upper = \x41-5a;
+alpha = lower | upper;
+node-id = lower (lower | digit | hyphen){0,};
+node-body-line = sp{4} str cr;
+fs-path = (alpha | digit | slash | back-slash | hyphen | dot){1,};
+src = fs-path;
+
+name = str;
+node-name = 'name' sp name cr;
+
+version = str;
+node-version = 'version' sp version cr;
+
+author = str;
+node-author = 
+        'author' cr
+        (indent author cr){1,};
+
+license = str;
+node-license = 
+        'license' cr
+        (indent license cr){1,};
+
+header-title = str;
+node-h1 = 'h1' sp header-title cr;
+
+node-p = 
+        'p' sp cr
+        ['id' = node-id cr]
+        cr
+        (node-body-line){1,};
+
+node-img =
+        'img' sp src cr
+        ['id' = node-id cr];
+
+doc = 
+        node-name node-version node-license node-author
+        (node-h1 | node-p | node-img){1,}

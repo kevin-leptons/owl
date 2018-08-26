@@ -1,0 +1,18 @@
+owl
+***
+
+    Text document processor.
+
+    Project is researching, there are no endpoint executable.
+
+Development
+===========
+
+Install pre-dependency packages by hands.
+
+    * fx-doc, latest as possible [1].
+
+Build document and follow it.
+
+    $ make doc
+    $ make doc-serve

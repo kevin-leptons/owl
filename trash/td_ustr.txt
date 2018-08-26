@@ -1,0 +1,207 @@
+NAME
+====
+
+td_ustr - unicode string
+
+SYNOPSIS
+========
+
+typedef struct {
+        size_t cap;             // read-only
+        size_t size;            // read-only
+        uint32_t *slots;        // read-only
+} td_ustr_t;
+
+void td_ustr_init(td_ustr_t *dst, size_t cap);
+void td_ustr_init_from(td_ustr_t *dst, td_ustr_t *src);
+void td_ustr_init_seq(td_ustr_t *dst, const uint32_t *src, size_t size);
+void td_ustr_init_seqc(td_ustr_t *dst, const char *src, size_t size);
+void td_ustr_init_seqwc(td_ustr_t *dst, const wchar_t *src, size_t size);
+void td_ustr_free(td_ustr_t *dst);
+
+void td_ustr_swap(td_ustr_t *dst, td_ustr_t *src);
+void td_ustr_move(td_ustr_t *dst,td_ustr_t *src);
+
+void td_ustr_copy(td_ustr_t *dst, td_ustr_t *src);
+void td_ustr_copy_seq(td_ustr_t *dst, const uint32_t *src, size_t size);
+void td_ustr_copy_seqc(td_ustr_t *dst, const char *src, size_t size);
+void td_ustr_copy_seqwc(td_ustr_t *dst, const wchar_t *src, size_t size);
+
+void td_ustr_ins(td_ustr_t *dst, const td_ustr_t *src, size_t index);
+void td_ustr_ins_seq(
+        td_ustr_t *dst,
+        const uint32_t *src,
+        size_t index,
+        size_t size
+);
+void td_ustr_ins_seqc(
+        td_ustr_t *dst,
+        const char *src,
+        size_t index,
+        size_t size
+);
+void td_ustr_ins_seqwc(
+        td_ustr_t *dst,
+        const wchar_t *src,
+        size_t index,
+        size_t size
+);
+
+void td_ustr_pushback(td_ustr_t *dst, uint32_t code);
+void td_ustr_pushbackc(td_ustr_t *dst, char code);
+void td_ustr_pushbackwc(td_ustr_t *dst, wchar_t code);
+
+void td_ustr_cat(td_ustr_t *dst, td_ustr_t *src);
+void td_ustr_cat_seq(td_ustr_t *dst, const uint32_t *src, size_t size);
+void td_ustr_cat_seqc(td_ustr_t *dst, const char *src, size_t size);
+void td_ustr_cat_seqwc(td_ustr_t *dst, const wchar_t *src, size_t size);
+
+void td_ustr_sub(
+        td_ustr_t *dst,
+        const td_ustr_t *src,
+        size_t begin,
+        size_t size
+);
+void td_ustr_erase(td_ustr_t *dst, size_t begin, size_t size);
+void td_ustr_clean(td_ustr_t *dst);
+void td_ustr_lower(td_ustr_t *dst);
+void td_ustr_upper(td_ustr_t *dst);
+
+uint32_t td_ustr_get(td_ustr_t *dst, size_t index);
+void td_ustr_set(td_ustr_t *dst, size_t index, uint32_t code);
+void td_ustr_setc(td_ustr_t *dst, size_t index, char code);
+void td_ustr_setwc(td_ustr_t *dst, size_t index, wchar_t code);
+
+DESCRIPTION
+===========
+
+`td_ustr` is an Abstract Data Type, represents for string and string's
+operations. A string is a sequence of Unicode's codepoint. A codepoint is an
+unsigned number, 4 bytes length and represents for a character, ex: 0x005A
+represents for 'Z' character. In computer, string of N characters does not
+contains only N characters, it contains N + 1 characters, last character is
+called terminated string to show that string is end at there. A string
+'hello' look like this:
+
+        (0x68, 0x65, 0x6C, 0x6C, 0x6F, 0x00)
+         'h'   'e'   'l'   'l'   'o'   NULL
+
+Limited string's operation are design and implement, not much and not all.
+
+`td_ustr_t` is called string's data structure, contains data and metadata of
+string. Metadata is uses to maintain string. It contains fields:
+
+        `cap` is capability of codepoints in string.
+
+        `size` is number of codepoints which residents in string.
+
+        `slots` is pointer to memory block which uses to stores codepoints.
+        Capability of `slots` is `cap` + 1, last slot is uses to stores
+        terminated string.
+
+A operations on string accepts multi input types to be suitable with common C
+strings.  Do not cast type then pass that functions, it will be wrong if size
+of cast type is not equal with specify type.  That operations have forms:
+
+        `td_ustr_<operation>()` accepts `uint32_t` as input.
+        `td_ustr_<operation>c()` accepts `char` as input.
+        `td_ustr_<operation>wc()` accepts `wchar_t` as input.
+
+`td_ustr_init*()` are constructors. Every instance of `td_ustr_t` must be
+initialize before pass it to strings' operations, even with `td_ustr_free`.
+
+`td_ustr_free()` release resource which uses by string. If a string was free
+then does not require to call `td_ustr_init()` on it to pass it to string's
+operations.
+
+`td_ustr_swap()` swap content of two strings.
+
+        td_ustr_t s1, s2;               // s1 = "one", s2 = "two"
+        td_ustr_swap(&s1, &s2);         // s1 = "two", s2 = "one"
+
+`td_ustr_move()` move content from `src` to `dst` string.
+
+        td_ustr_t s1, s2;               // s1 = "one", s2 = "two"
+        td_ustr_move(&s1, &s2);         // s1 = "two", s2 = empty
+
+`td_ustr_copy*()` copy content from `src` to `dst` string.
+
+        td_ustr_t s1, s2;               // s1 = "one", s2 = "two"
+        td_ustr_copy(&s1, &s2);         // s1 = "two", s2 = "two"
+
+`td_ustr_ins*()` insert content of `src` string into `dst` string at specific
+position `index`.
+
+        td_ustr_t s1, s2;               // s1 = "one--three", s2 = "two"
+        td_ustr_ins(&s1, &s2, 3);       // s2 = "one-two-three"
+
+`td_ustr_pushback*()` insert a codepoint to end of 'dst' string.
+
+        td_ustr_t s1;                   // s1 = "on"
+        td_ustr_pushbackc(&s1, 'e');    // s1 = "one"
+
+`td_ustr_cat*()` join `src` string into end of `dest` string. 
+
+        td_ustr_t s1, s2;               // s1 = "on" s2 = "e"
+        td_ustr_cat(&s1, &s2);          // s1 = "one"
+
+`td_ustr_sub()` create a new string with content is codepoints from `src` in
+range [begin, begin + size - 1], then put new string into `dst`.
+
+        td_ustr_t s1, s2;               // s1 = "one", s2 = "two-there-four"
+        td_ustr_sub(&s1, &s2, 10, 4);   // s1 = "four"
+
+`td_ustr_erase()` remove codepoints from string in range [begin, begin + size
+- 1].
+
+        td_ustr_t s1;                   // s1 = "one-two-three"
+        td_ustr_erase(&1, 4, 4);        // s1 = "one-three"
+
+`td_ustr_clean()` make string to be empty but does not release memory which
+is uses by string.
+        
+        td_ustr_t s1;                   // s1 = "one-two-three"
+        td_ustr_clean(&s1);             // s1 = empty
+
+`td_ustr_lower()` change uppercase characters in `dst` to lowercase.
+
+        td_ustr_t s1;                   // s1 = "ONE-two-three"
+        td_ustr_lower(&s1);             // s1 = "one-two-three"
+
+`td_ustr_upper()` change lowercase characters in `dst` to uppercase.
+
+        td_ustr_t s1;                   // s1 = "one-TWO-THREE"
+        td_ustr_upper(&s1);             // s1 = "ONE-TWO-THREE"
+
+`td_ustr_get()` retrieve a codepoint at specific position `index` of `dst`
+string.
+
+        td_ustr_t s1;                   // s1 = "one"
+        td_ustr_get(&s1, 1);            // return code of 'n' 
+
+`td_ustr_set*()` change a codepoint at specific position `index` of `dst`
+string.
+
+        td_ustr_t s1;                   // s1 = "one"
+        td_ustr_setc(&s1, '*', 1);      // s1 = "o*e"
+
+BUGS
+====
+
+`td_ustr_lower()` and `td_ustr_upper()` works with ASCII codepoints only.
+
+EXAMPLE
+=======
+
+        td_ustr_t s1;
+        td_ustr_t s2;
+
+        td_ustr_init(&s1, "one", 3);            // s1 = "one"
+        td_ustr_init(&s2, "two", 3);            // s2 = "two"
+        
+        td_ustr_pushbackc(&1, '-');             // s1 = "one-"
+
+        td_ustr_cat(&s1, &s2);                  // s1 = "one-two"
+
+        td_ustr_free(&s2);                      // s2 = empty
+        td_ustr_free(&s1);                      // s1 = empty

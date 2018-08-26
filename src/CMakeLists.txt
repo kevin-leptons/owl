@@ -1,0 +1,16 @@
+file(GLOB LIB_TEXTDOC_FILES textdoc/*.c)
+add_library(textdoc-core SHARED ${LIB_TEXTDOC_FILES})
+
+file(GLOB EXE_FILES exe/*.c)
+foreach(EXE_FILE ${EXE_FILES})
+        get_filename_component(EXE_DEST ${EXE_FILE} NAME_WE)
+        add_executable(${EXE_DEST} ${EXE_FILE})
+        target_link_libraries(${EXE_DEST} textdoc-core) 
+endforeach()
+
+file(GLOB TEST_FILES test/*.c)
+foreach(TEST_FILE ${TEST_FILES})
+        get_filename_component(TEST_DEST ${TEST_FILE} NAME_WE)
+        add_executable(${TEST_DEST} ${TEST_FILE})
+        target_link_libraries(${TEST_DEST} textdoc-core)
+endforeach()

@@ -1,0 +1,95 @@
+h1 Grammar
+
+        cr = %x0d 
+        lf = %x0a
+        crlf = %x0d.0a
+        sp = %x20
+        number = %x30-39
+        alpha-lower = %x61-7a
+        alpha-upper = %x41-5a
+        alpha = alpha-lower / alpha-upper
+        hyphen = %x2d
+        indent = 4sp
+        str-char = %x20-7e
+        str = 1*str-char
+
+        tag-name = %x6e.61.6d.65                                ; name
+        tag-version = %x76.65.72.73.69.6f.6e                    ; version
+        tag-licenses = %x6c.69.63.65.6e.73.65.73                ; licenses
+        tag-authors = %x61.75.74.68.6f.72.73                    ; authors
+        tag-variables = %x76.61.72.69.61.62.6c.65.73            ; variables
+        tag-h1 = %x68.31                                        ; h1
+        tag-h2 = %x68.32                                        ; h2
+        tag-h3 = %x68.33                                        ; h3
+        tag-h4 = %x68.34                                        ; h4
+        tag-h5 = %x68.35                                        ; h5
+        tag-h6 = %x68.36                                        ; h6
+        tag-p = %x70                                            ; p
+        tag-code = %x63.6f.64.65                                ; code
+        tag-img = %x69.6d.67                                    ; img
+        tag-table = %x74.61.62.6c.65                            ; table
+
+        node-id = alpha-lower *(alpha-lower / number / hyphen)
+        node-body-part = str
+
+        doc-name = str
+        node-name = tag-name sp doc-name cr
+
+        doc-version = str
+        node-version = tag-version sp doc-version cr
+
+        doc-licenses = str
+        node-licenses = tag-licenses sp doc-licenses
+
+        doc-authors = str
+        node-authors = tag-authors sp doc-authors
+
+        var-name = alpha-lower *(alpha-lower / number / hyphen)
+        var-value = str
+        node-variables = 
+                tag-variables sp cr
+                1*(var-name sp var-value)
+
+        node-h-title = str
+        node-h1 = 
+                tag-h1 sp h-title cr
+                [indent node-id cr] 
+        node-h2 =
+                tag-h2 sp h-title cr
+                [indent node-id cr]
+        node-h3 = 
+                tag-h3 sp h-title cr
+                [indent node-id cr]
+        node-h4 = 
+                tag-h4 sp h-title cr
+                [indent node-id cr]
+        node-h5 =
+                tag-h5 sp h-title cr
+                [indent node-id cr]
+        node-h6 = 
+                tag-h6 sp h-title cr
+                [indent node-id cr]
+
+        node-p-part = str
+        node-p = 
+                tag-p cr
+                [indent node-id cr]
+                1*(indent node-body-part cr)
+
+        node-code = 
+                tag-code cr
+                [indent node-id cr]
+                1*(indent node-body-part cr)
+
+        node-img = 
+                tag-img sp node-img-src cr
+                [indent node-id cr]
+
+        node-table = 
+                tag-table sp cr
+                [indent node-id cr]
+                1*(indent node-boy-part cr)
+
+        doc =
+                node-name node-version node-licenses node-authors
+                [node-variables] 1*node
